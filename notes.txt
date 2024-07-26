@@ -1,0 +1,63 @@
+https://www.youtube.com/watch?v=o080tU3sd0k
+
+
+supabase database password : 2c5JAH$g$.u4cKa
+API key : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhoc2l6dGRkZGZ6aWpmcmF0aGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA1OTE2NDYsImV4cCI6MjAzNjE2NzY0Nn0.8kI5l-FZPGEIKvKNWS7edas03t_rdYKDPJlDZfffPrQ
+URL:https://xhsiztdddfzijfrathdv.supabase.co
+
+postgresql://postgres.xhsiztdddfzijfrathdv:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+
+
+
+# Connect to Supabase via connection pooling with Supavisor.
+DATABASE_URL="postgresql://postgres.xhsiztdddfzijfrathdv:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Direct connection to the database. Used for migrations.
+DIRECT_URL="postgresql://postgres.xhsiztdddfzijfrathdv:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+        
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+        
+
+        # This was inserted by `prisma init`:
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+# DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+
+
+
+//Clerk
+id is a string since we are using Clerk
+
+//prisma
+prisma client is for doing crud operations
+
+
+//ngrok
+//ngrok config add-authtoken 2j5I3H7UhpdGDchHxzVaBAE9OtT_4YRcp3CGe3nmPLxrH8Wq1
+
+Account                       PM Esparas (Plan: Free)                                                                   Update                        update available (version 3.12.0, Ctrl-U to update)                                       Version                       3.11.0                                                                                    Region                        Asia Pacific (ap)                                                                         Latency                       114ms                                                                                     Web Interface                 http://127.0.0.1:4040                                                                     Forwarding                    https://b149-180-190-220-235.ngrok-free.app -> http://localhost:3000                                                                                                                                              Connections                   ttl     opn     rt1     rt5     p50     p90                                                                             0       0       0.00    0.00    0.00    0.00        
+
+//Forwarding                    https://trusting-awfully-slug.ngrok-free.app -> http://localhost:3000  
+Forwarding                    https://47d8-180-190-152-121.ngrok-free.app -> http://localhost:3000   
+Forwarding                    https://89a0-180-190-152-121.ngrok-free.app -> http://localhost:3000 
+
+
+///Cloudinary for image upload
+
+
+Context: useUser() and useAuth() are client-side hooks, while auth() is a server-side function.
+
+ useUser() provides detailed user information, 
+ useAuth() provides basic authentication information, 
+ and auth() provides server-side authentication information. 
+
+ Usage: useUser() and useAuth() are used in React components, while auth() is used in server-side code. 
