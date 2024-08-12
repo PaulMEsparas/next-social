@@ -1,0 +1,350 @@
+"use server";
+
+import prisma from "./client";
+
+// // Follow/Unfollow User
+// export const handleSwitchFollow = async (followerId, followingId) => {
+//   const action = await prisma.follower.findFirst({
+//     where: {
+//       followerId,
+//       followingId,
+//     },
+//   });
+
+//   if (action) {
+//     await prisma.follower.delete({
+//       where: {
+//         id: action.id,
+//       },
+//     });
+//     await prisma.notification.create({
+//       data: {
+//         type: "unfollow",
+//         message: `User ${followerId} unfollowed you.`,
+//         userId: followingId,
+//         isRead: false,
+//       },
+//     });
+//   } else {
+//     await prisma.follower.create({
+//       data: {
+//         followerId,
+//         followingId,
+//       },
+//     });
+//     await prisma.notification.create({
+//       data: {
+//         type: "follow",
+//         message: `User ${followerId} followed you.`,
+//         userId: followingId,
+//         isRead: false,
+//       },
+//     });
+//   }
+// };
+
+//Follow, Accept Follow request  and Unfollow notification handlers
+// Send Follow Request
+export const handleSendFollowRequest = async (senderId, receiverId) => {
+  // await prisma.followRequest.create({
+  //   data: {
+  //     senderId,
+  //     receiverId,
+  //   },
+  // });
+
+  await prisma.notification.create({
+    data: {
+      type: "follow_request",
+      message: `User ${senderId} sent you a follow request.`,
+      userId: receiverId,
+      isRead: false,
+    },
+  });
+};
+
+// Accept Follow Request
+export const handleAcceptFollowRequest = async (senderId, receiverId) => {
+  // await prisma.follower.create({
+  //   data: {
+  //     followerId: senderId,
+  //     followingId: receiverId,
+  //   },
+  // });
+
+  // await prisma.followRequest.deleteMany({
+  //   where: {
+  //     senderId,
+  //     receiverId,
+  //   },
+  // });
+
+  await prisma.notification.create({
+    data: {
+      type: "accept_follow_request",
+      message: `User ${receiverId} accepted your follow request.`,
+      userId: senderId,
+      isRead: false,
+    },
+  });
+};
+
+// Decline Follow Request
+export const handleDeclineFollowRequest = async (senderId, receiverId) => {
+  // await prisma.followRequest.deleteMany({
+  //   where: {
+  //     senderId,
+  //     receiverId,
+  //   },
+  // });
+
+  await prisma.notification.create({
+    data: {
+      type: "decline_follow_request",
+      message: `User ${receiverId} declined your follow request.`,
+      userId: senderId,
+      isRead: false,
+    },
+  });
+};
+
+// Unfollow User
+export const handleUnfollow = async (
+  followerId: string,
+  followingId: string
+) => {
+  // await prisma.follower.deleteMany({
+  //   where: {
+  //     followerId,
+  //     followingId,
+  //   },
+  // });
+
+  await prisma.notification.create({
+    data: {
+      type: "unfollow",
+      message: `User ${followerId} unfollowed you.`,
+      userId: followingId,
+      isRead: false,
+    },
+  });
+};
+
+// Block/Unblock User
+export const handleSwitchBlock = async (blockerId, blockedId) => {
+  const action = await prisma.block.findFirst({
+    where: {
+      blockerId,
+      blockedId,
+    },
+  });
+
+  if (action) {
+    await prisma.block.delete({
+      where: {
+        id: action.id,
+      },
+    });
+    await prisma.notification.create({
+      data: {
+        type: "unblock",
+        message: `User ${blockerId} unblocked you.`,
+        userId: blockedId,
+        isRead: false,
+      },
+    });
+  } else {
+    await prisma.block.create({
+      data: {
+        blockerId,
+        blockedId,
+      },
+    });
+    await prisma.notification.create({
+      data: {
+        type: "block",
+        message: `User ${blockerId} blocked you.`,
+        userId: blockedId,
+        isRead: false,
+      },
+    });
+  }
+};
+
+// Accept Follow Request
+// export const handleAcceptFollowRequest = async (senderId, receiverId) => {
+//   await prisma.follower.create({
+//     data: {
+//       followerId: senderId,
+//       followingId: receiverId,
+//     },
+//   });
+//   await prisma.followRequest.deleteMany({
+//     where: {
+//       senderId,
+//       receiverId,
+//     },
+//   });
+  await prisma.notification.create({
+    data: {
+      type: "accept_follow_request",
+      message: `User ${receiverId} accepted your follow request.`,
+      userId: senderId,
+      isRead: false,
+    },
+  });
+// };
+
+// // Decline Follow Request
+// export const handleDeclineFollowRequest = async (senderId, receiverId) => {
+//   await prisma.followRequest.deleteMany({
+//     where: {
+//       senderId,
+//       receiverId,
+//     },
+//   });
+  await prisma.notification.create({
+    data: {
+      type: "decline_follow_request",
+      message: `User ${receiverId} declined your follow request.`,
+      userId: senderId,
+      isRead: false,
+    },
+  });
+};
+
+// Update Profile
+export const handleUpdateProfile = async (userId) => {
+  await prisma.notification.create({
+    data: {
+      type: "update_profile",
+      message: `User ${userId} updated their profile.`,
+      userId,
+      isRead: false,
+    },
+  });
+};
+
+// Like/Unlike Post or Comment
+export const handleSwitchLike = async (userId, postId, commentId) => {
+  let targetId, targetField, targetType;
+  if (postId) {
+    targetId = postId;
+    targetField = "postId";
+    targetType = "post";
+  } else {
+    targetId = commentId;
+    targetField = "commentId";
+    targetType = "comment";
+  }
+
+  const action = await prisma.like.findFirst({
+    where: {
+      userId,
+      [targetField]: targetId,
+    },
+  });
+
+  if (action) {
+    await prisma.like.delete({
+      where: {
+        id: action.id,
+      },
+    });
+    await prisma.notification.create({
+      data: {
+        type: `unlike_${targetType}`,
+        message: `User ${userId} unliked your ${targetType}.`,
+        userId: targetId,
+        isRead: false,
+      },
+    });
+  } else {
+    await prisma.like.create({
+      data: {
+        userId,
+        [targetField]: targetId,
+      },
+    });
+    await prisma.notification.create({
+      data: {
+        type: `like_${targetType}`,
+        message: `User ${userId} liked your ${targetType}.`,
+        userId: targetId,
+        isRead: false,
+      },
+    });
+  }
+};
+
+// Add Comment
+export const handleAddComment = async (userId, postId, commentId) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
+
+  if (post) {
+    await prisma.notification.create({
+      data: {
+        type: "add_comment",
+        message: `User ${userId} commented on your post.`,
+        userId: post.userId,
+        isRead: false,
+      },
+    });
+  }
+};
+
+// Add Post
+export const handleAddPost = async (userId) => {
+  const followers = await prisma.follower.findMany({
+    where: { followingId: userId },
+    select: { followerId: true },
+  });
+
+  const notifications = followers.map((follower) => ({
+    type: "add_post",
+    message: `User ${userId} added a new post.`,
+    userId: follower.followerId,
+    isRead: false,
+  }));
+
+  await prisma.notification.createMany({
+    data: notifications,
+  });
+};
+
+// Add Story
+export const handleAddStory = async (userId) => {
+  const followers = await prisma.follower.findMany({
+    where: { followingId: userId },
+    select: { followerId: true },
+  });
+
+  const notifications = followers.map((follower) => ({
+    type: "add_story",
+    message: `User ${userId} added a new story.`,
+    userId: follower.followerId,
+    isRead: false,
+  }));
+
+  await prisma.notification.createMany({
+    data: notifications,
+  });
+};
+
+// Delete Post
+export const handleDeletePost = async (userId, postId) => {
+  await prisma.post.delete({
+    where: { id: postId },
+  });
+
+  await prisma.notification.create({
+    data: {
+      type: "delete_post",
+      message: `User ${userId} deleted a post.`,
+      userId,
+      isRead: false,
+    },
+  });
+};

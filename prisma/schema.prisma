@@ -23,13 +23,14 @@ model User {
   posts                  Post[]
   comments               Comment[]
   likes                  Like[]
-  followers              Follower[]      @relation("UserFollowers")
-  followings             Follower[]      @relation("UserFollowings")
+  followers              Follower[]      @relation("UserFollowings")
+  followings             Follower[]      @relation("UserFollowers")
   followRequestsSent     FollowRequest[] @relation("FollowRequestsSent")
   followRequestsReceived FollowRequest[] @relation("FollowRequestsReceived")
   blocks                 Block[]         @relation("BlocksSent")
   blockedBy              Block[]         @relation("BlocksReceived")
   stories                Story[]
+  notifications          Notification[]
 }
 
 model Post {
@@ -105,4 +106,15 @@ model Story {
   img       String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique
+}
+
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  type      String   
+  message   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  isRead    Boolean  @default(false)
 }

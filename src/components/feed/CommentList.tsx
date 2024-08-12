@@ -3,6 +3,7 @@
 import { addComment } from "@/lib/action";
 import { useUser } from "@clerk/nextjs";
 import { Comment, User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import { useOptimistic, useState } from "react";
 

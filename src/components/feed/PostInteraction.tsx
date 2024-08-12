@@ -1,9 +1,9 @@
 "use client";
 
-import { switchLike } from "@/lib/action";
+import { fetchCommentCount, switchLike } from "@/lib/action";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
-import { useOptimistic, useState } from "react";
+import { useOptimistic, useState, useEffect } from "react";
 
 const PostInteraction = ({
   postId,
@@ -15,6 +15,7 @@ const PostInteraction = ({
   commentNumber: number;
 }) => {
   const { userId, isLoaded } = useAuth(); //useAuth to get the userId client side
+  const [commentCount, setCommentCount] = useState(commentNumber);
 
   //State for the like button
   const [likeState, setLikeState] = useState({
@@ -69,7 +70,7 @@ const PostInteraction = ({
             {optimisticLike.likeCount}
             <span className="hidden md:inline">
               {optimisticLike.likeCount === 0
-                ? " "
+                ? " Like"
                 : " Like" + (optimisticLike.likeCount > 1 ? "s" : "")}
             </span>
           </span>
@@ -85,7 +86,11 @@ const PostInteraction = ({
           <span className="text-gray-300">|</span>
           <span className="text-gray-500">
             {commentNumber}
-            <span className="hidden md:inline"> Comments</span>
+            <span className="hidden md:inline">
+              {commentNumber === 0
+                ? " Comment"
+                : " Comment" + (commentNumber > 1 ? "s" : "")}
+            </span>
           </span>
         </div>
       </div>

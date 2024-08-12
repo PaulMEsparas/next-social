@@ -9,34 +9,12 @@ const ProfileCard = async () => {
 
   if (!userId) return null;
 
-  //get user data from database
-  // const user = await prisma.user.findFirst({
-  //   where: {
-  //     id: userId,
-  //   },
-  //   //get followers for the particular userId(the one logged in)
-  //   include: {
-  //     _count: {
-  //       select: {
-  //         followers: true,
-  //       },
-  //     },
-  //     followers: {
-  //       include: {
-  //         follower: {
-  //           select: {
-  //             avatar: true,
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
-
+  // get user data from database
   const user = await prisma.user.findFirst({
     where: {
       id: userId,
     },
+    //get followers for the particular userId(the one logged in)
     include: {
       _count: {
         select: {
@@ -116,7 +94,10 @@ const ProfileCard = async () => {
             /> */}
           </div>
           <span className="text-xs text-gray-500">
-            {user._count.followers} Followers
+            {user._count.followers}{" "}
+            {user._count.followers === 0
+              ? " follower"
+              : " follower" + (user._count.followers > 1 ? "s" : "")}
           </span>
         </div>
         <Link href={`/profile/${user.username}`}>

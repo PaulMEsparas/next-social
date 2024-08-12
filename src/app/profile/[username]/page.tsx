@@ -5,6 +5,7 @@ import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import Friends from "@/components/Friends";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params.username;

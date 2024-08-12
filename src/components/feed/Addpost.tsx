@@ -1,7 +1,10 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { CldUploadWidget } from "next-cloudinary";
+import {
+  CldUploadWidget,
+  CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
 
 import Image from "next/image";
 import { useState } from "react";
@@ -17,22 +20,22 @@ const Addpost = () => {
     return "Loading...";
   }
 
-  // const testAction = async (formData: FormData) => {
-  //   "use server";
-  //   if (!userId) return;
-  //   const desc = formData.get("desc") as string;
-  //   try {
-  //     const response = await prisma.post.create({
-  //       data: {
-  //         userId: userId,
-  //         desc: desc,
-  //       },
-  //     });
-  //     console.log(response, "response");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleUploadSuccess = (result: CloudinaryUploadWidgetResults) => {
+    if (
+      result.info &&
+      typeof result.info === "object" &&
+      "secure_url" in result.info
+    ) {
+      setImg(result.info.secure_url);
+    }
+  };
+
+  const handleSubmit = async (formData: FormData) => {
+    await addPost(formData, img || "");
+    setImg(null); // Reset the image placeholder after form submission
+    setDesc("");
+  };
+
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm">
       {/* AVATAR */}
@@ -46,10 +49,19 @@ const Addpost = () => {
       {/* POST */}
       <div className="flex-1">
         {/* TEXT INPUT */}
-        <form
+        {/* <form
           action={(formData) => {
             addPost(formData, img?.secure_url || "");
             setDesc("");
+            setImg(null);
+          }}
+          className="flex gap-4"
+        > */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            handleSubmit(formData);
           }}
           className="flex gap-4"
         >
@@ -57,6 +69,7 @@ const Addpost = () => {
             placeholder="What's on your mind?"
             className="bg-slate-100 rounded-lg flex-1 p-2"
             name="desc"
+            value={desc}
             onChange={(e) => setDesc(e.target.value)}
           ></textarea>
           {/* <div>
@@ -75,10 +88,11 @@ const Addpost = () => {
           {/* UPLOAD IMG */}
           <CldUploadWidget
             uploadPreset="SosyalMedia"
-            onSuccess={(result, { widget }) => {
-              setImg(result.info);
-              widget.close();
-            }}
+            // onSuccess={(result, { widget }) => {
+            //   setImg(result.info);
+            //   widget.close();
+            // }}
+            onSuccess={handleUploadSuccess}
           >
             {/* //returns secure URL for the app to consume */}
             {({ open }) => {
@@ -87,7 +101,12 @@ const Addpost = () => {
                   className="flex items-center gap-2 cursor-pointer"
                   onClick={() => open()}
                 >
-                  <Image src="/addimage.png" alt="" width={20} height={20} />
+                  <Image
+                    src={img || "/addimage.png"}
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
                   Photo
                 </div>
               );
