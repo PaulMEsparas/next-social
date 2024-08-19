@@ -90,6 +90,7 @@ const StoriesPath = async () => {
                   <span className="font-medium">
                     {story.user.name || story.user.username}
                   </span>
+                  <span>{story.id}</span>
                 </div>
               ))
             ) : (

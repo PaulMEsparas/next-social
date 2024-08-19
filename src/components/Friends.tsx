@@ -27,8 +27,8 @@ const Friends = async ({ user }: { user: User }) => {
       <div className="flex gap-4 flex-wrap">
         {friends.length
           ? friends.map((friend) => (
-              <div className="relative w-1/5 h-24">
-                <Link href={`/profile/${friend.username}`} key={friend.id}>
+              <div className="relative w-1/5 h-24" key={friend.id}>
+                <Link href={`/profile/${friend.username}`}>
                   <Image
                     src={friend.avatar || "/default-avatar.png"}
                     alt={friend.username}
