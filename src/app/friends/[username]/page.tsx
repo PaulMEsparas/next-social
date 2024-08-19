@@ -13,6 +13,12 @@ const FriendsListPage = async ({
   params: { username: string };
 }) => {
   const username = params.username;
+  // console.log(username);
+  // const FriendsListPage = async () => {
+  //   //get userId from auth clerk
+  //   const { userId } = auth();
+
+  //   if (!userId) return null;
 
   //find the profile of some other user's profile
   const user = await prisma.user.findFirst({
@@ -55,7 +61,8 @@ const FriendsListPage = async ({
     <div className="flex gap-6 pt-6">
       {/* LEFT */}
       <div className="hidden xl:block w-[20%]">
-        <LeftMenu type="profile" />
+        {/* <LeftMenu type="profile" /> */}
+        <LeftMenu type="home" />
       </div>
       {/* CENTER */}
       <div className="w-full lg:w-[70%] xl:w-[50%]">

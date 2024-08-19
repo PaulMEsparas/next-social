@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       "svix-signature": svix_signature,
     }) as WebhookEvent;
   } catch (err) {
-    console.error("Error verifying webhook:", err);
+    // console.error("Error verifying webhook:", err);
     return new Response("Error occured", {
       status: 400,
     });
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       });
       return new Response("User has been created!", { status: 200 });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return new Response("Failed to create the user!", { status: 500 });
     }
   }
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
       });
       return new Response("User has been updated!", { status: 200 });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return new Response("Failed to update the user!", { status: 500 });
     }
   }

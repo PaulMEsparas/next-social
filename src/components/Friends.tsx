@@ -15,7 +15,7 @@ const Friends = async ({ user }: { user: User }) => {
   }
   // Fetch all friends (both followers and followings)
   const friends = await getFriends(user.id);
-  console.log(friends, "Friends");
+  // console.log(friends, "Friends");
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-4">

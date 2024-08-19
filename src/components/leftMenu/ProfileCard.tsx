@@ -33,7 +33,7 @@ const ProfileCard = async () => {
     },
   });
 
-  console.log(user, "USER LEFT");
+  // console.log(user, "USER LEFT");
 
   if (!user) return null;
   return (

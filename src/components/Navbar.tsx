@@ -5,6 +5,7 @@ import prisma from "@/lib/client";
 import {
   ClerkLoaded,
   ClerkLoading,
+  RedirectToSignIn,
   SignedIn,
   SignedOut,
   UserButton,
@@ -12,16 +13,28 @@ import {
 import ThemeToggle from "./ThemeToggle";
 import Notifications from "./Notifications";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+// import { redirect, usePathname } from "next/navigation";
+// import NavbarLinks from "./NavbarLinks";
 
 const Navbar = async () => {
+  // Check if the user is authenticated
   const { userId: currentUserId } = auth();
+  // const pathname = usePathname(); // Get the current path
 
-  //if current user not logged in
+  // // Redirect to sign-in if not authenticated
   if (!currentUserId) {
-    throw new Error("User not Authenticated! Please log in...");
+    <RedirectToSignIn />; // This will automatically redirect to the sign-in page
+    return null;
+    //   // throw new Error("User not Authenticated! Please log in...");
   }
+  // Avoid redirecting if the user is already on the sign-in page
+  // if (!currentUserId) {
+  //   redirect("/sign-in/");
+  //   return null;
+  // }
 
-  // Fetch the current user data
+  // // Fetch the current user's data
   let currentUser;
   try {
     currentUser = await prisma.user.findUnique({
@@ -33,7 +46,7 @@ const Navbar = async () => {
       throw new Error("Current user not found");
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new Error("Something went wrong while fetching user data");
   }
 
@@ -46,9 +59,9 @@ const Navbar = async () => {
         </Link>
       </div>
       {/* CENTER */}
-      <div className="hidden md:flex md:justify-center w-[50%] text-sm items-center justify-between">
-        {/* LINKS */}
-        <div className="flex gap-6 text-gray-600">
+      {/* <div className="hidden md:flex md:justify-center w-[50%] text-sm items-center justify-between"> */}
+      {/* LINKS */}
+      {/* <div className="flex gap-6 text-gray-600">
           <Link href="/" className="flex items-center gap-2">
             <Image
               // src="/home.png"
@@ -88,35 +101,80 @@ const Navbar = async () => {
             />
             <span className="dark:text-white">Stories</span>
           </Link>
-        </div>
-        {/* SEACRH INPUT */}
-        {/* <div className="hidden xl:flex p-2 bg-slate-100 items-center rounded-xl ">
-          <input
-            type="text"
-            placeholder="Search.."
-            className="bg-transparent outline-none"
-          />
-          <Image src="/search.png" alt="" width={14} height={14} />
         </div> */}
-      </div>
+      {/* SEACRH INPUT */}
+      {/* <div className="hidden xl:flex p-2 bg-slate-100 items-center rounded-xl ">
+           <input
+             type="text"
+             placeholder="Search.."
+             className="bg-transparent outline-none"
+           />
+           <Image src="/search.png" alt="" width={14} height={14} />
+         </div>  */}
+      {/* </div> */}
       {/* RIGHT */}
-      <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
-        <ClerkLoading>
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] "></div>
-        </ClerkLoading>
-        <ClerkLoaded>
-          <ThemeToggle />
-          <SignedIn>
-            {/* <div className="cursor-pointer">
+      {/* <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end"> */}
+      <ClerkLoading>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] "></div>
+      </ClerkLoading>
+      <ClerkLoaded>
+        <SignedIn>
+          {/* <NavbarLinks /> */}
+          {/* CENTER */}
+          <div className="hidden md:flex md:justify-center w-[50%] text-sm items-center justify-between">
+            {/* LINKS */}
+            <div className="flex gap-6 text-gray-600">
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  // src="/home.png"
+                  src="/Home.svg"
+                  alt="Homepage"
+                  width={20}
+                  height={20}
+                  className="w-4 h-4"
+                />
+                <span className="dark:text-white">Home</span>
+              </Link>
+              <Link
+                href={`/friends/${currentUser.username}`}
+                className="flex items-center gap-2"
+              >
+                <Image
+                  // src="/friends.png"
+                  src="/Friends.svg"
+                  alt="Friends"
+                  width={20}
+                  height={20}
+                  className="w-6 h-6"
+                />
+                <span className="dark:text-white">Friends</span>
+              </Link>
+              <Link
+                href={`/stories/${currentUser.username}`}
+                className="flex items-center gap-2"
+              >
+                <Image
+                  // src="/stories.png"
+                  src="/Stories.svg"
+                  alt="Stories"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+                <span className="dark:text-white">Stories</span>
+              </Link>
+            </div>
+          </div>
+          {/* <div className="cursor-pointer">
               <Image src="/people.png" alt="" width={24} height={24} />
             </div>
             <div className="cursor-pointer">
               <Image src="/messages.png" alt="" width={24} height={24} />
             </div> */}
-            {/* <div className="cursor-pointer">
+          {/* <div className="cursor-pointer">
               <Image src="/notifications.png" alt="" width={24} height={24} />
             </div> */}
-            {/* <Link href="/" className="flex items-center gap-2">
+          {/* <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/home.png"
                 alt="Homepage"
@@ -149,20 +207,22 @@ const Navbar = async () => {
                 className="w-4 h-4"
               />
             </Link> */}
+          <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
+            <ThemeToggle />
             <Notifications />
             <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <div className="flex items-center gap-2 text-sm">
-              <Image src="/login.png" alt="" width={20} height={20} />
-              <Link href="/sign-in" className="dark:text-white">
-                Login/Register
-              </Link>
-            </div>
-          </SignedOut>
-        </ClerkLoaded>
-        <MobileMenu />
-      </div>
+          </div>
+        </SignedIn>
+        <SignedOut>
+          <div className="flex items-center gap-2 text-sm">
+            <Image src="/login.png" alt="" width={20} height={20} />
+            <Link href="/sign-in" className="dark:text-white">
+              Login/Register
+            </Link>
+          </div>
+        </SignedOut>
+      </ClerkLoaded>
+      <MobileMenu params={currentUser} />
     </div>
   );
 };

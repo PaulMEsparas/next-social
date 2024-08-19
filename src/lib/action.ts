@@ -279,7 +279,7 @@ export const updateProfile = async (
 
   //To get all the fields in formData
   const fields = Object.fromEntries(formData);
-  console.log(fields, "fields");
+  // console.log(fields, "fields");
 
   //filtering fields to avoid taking the empty fields
   const filteredFields = Object.fromEntries(
@@ -327,9 +327,9 @@ export const updateProfile = async (
       },
     });
     return { success: true, error: false };
-    console.log(res, "Response");
+    // console.log(res, "Response");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { success: false, error: true };
   }
 };
@@ -410,7 +410,7 @@ export const switchLike = async (postId: number) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new Error("Something went wrong");
   }
 };
@@ -443,7 +443,7 @@ export const addComment = async (postId: number, desc: string) => {
 
     return createdComment;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     throw new Error("Something went wrong!");
   }
 };
@@ -521,7 +521,7 @@ export const addPost = async (formData: FormData, img: string) => {
 
     revalidatePath("/");
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     throw new Error("Something went wrong!");
   }
 };

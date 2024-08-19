@@ -1,10 +1,21 @@
 "use client";
 
+import prisma from "@/lib/client";
+import { RedirectToSignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { useState } from "react";
 
-const MobileMenu = () => {
+// const MobileMenu = () => {
+const MobileMenu = ({ params }: { params: { username: string } }) => {
+  const username = params.username;
+  // console.log(username, "USERNAME");
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLinkClick = () => {
+    setIsOpen(false); // Close the menu when a link is clicked
+  };
+
   return (
     <div className="md:hidden">
       <div
@@ -29,11 +40,17 @@ const MobileMenu = () => {
       </div>
       {isOpen && (
         <div className=" absolute left-0 top-24 w-full h-[calc(100vh-96px)] bg-white flex flex-col items-center justify-center gap-8 font-medium text-xl z-10 ">
-          <Link href="/">Home</Link>
-          <Link href="/">Friends</Link>
-          <Link href="/">Groups</Link>
-          <Link href="/">Stories</Link>
-          <Link href="/">Login</Link>
+          <Link href="/" onClick={handleLinkClick}>
+            Home
+          </Link>
+          <Link href={`/friends/${username}`} onClick={handleLinkClick}>
+            Friends
+          </Link>
+          {/* <Link href="/">Groups</Link> */}
+          <Link href={`/stories/${username}`} onClick={handleLinkClick}>
+            Stories
+          </Link>
+          {/* <Link href="/sign-in">Login</Link> */}
         </div>
       )}
     </div>
