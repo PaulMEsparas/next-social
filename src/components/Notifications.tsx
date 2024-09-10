@@ -10,6 +10,7 @@ import {
 } from "@/lib/action";
 
 import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
 
 // type NotificationType = Notification & { user: User };
 
@@ -121,12 +122,14 @@ const Notifications: React.FC = () => {
         ref={toggleRef}
         className="cursor-pointer relative"
       >
-        <img
-          // src="/notifications.png"
+        <Image
+          // src="a/notifications.png"
           src="/Notification.svg"
           alt="Notifications"
           title="Notifications"
           className="w-6 h-6 md:w-8 md:h-8 lg:w-6 lg:h-6"
+          width={12}
+          height={12}
         />
         {unreadCount > 0 && !hasViewedNotifications && (
           <span className="absolute top-0 right-0 w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">

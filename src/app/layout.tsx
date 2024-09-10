@@ -7,8 +7,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Socio media App",
-  description: "Next.js Social Media App",
+  title: "Sosyal Medya",
+  description: "Social Media",
 };
 
 export default function RootLayout({
